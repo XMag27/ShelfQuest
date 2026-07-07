@@ -2,7 +2,7 @@
 
 import { PlayStatus, CompletionStatus, playStatusLabelMap, completionStatusLabelMap } from '@/types';
 import { cn } from '@/lib/utils';
-import { Play, CheckCircle, Clock, PauseCircle, XCircle, Heart } from 'lucide-react';
+import { Play, Activity, CheckCircle, Clock, PauseCircle, XCircle, Heart } from 'lucide-react';
 
 type BadgeType = PlayStatus | CompletionStatus;
 
