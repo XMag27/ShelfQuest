@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { signOut } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 import { useRouter } from 'next/navigation';
@@ -18,9 +19,11 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 
 export function Header() {
   const { user } = useAuthStore();
-  const { theme, setTheme } = useTheme();
-  const router = useRouter();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
+  const router = useRouter();
+  const { theme, setTheme } = useTheme();
   const handleSignOut = async () => {
     await signOut(auth);
     router.push('/login');
@@ -56,7 +59,7 @@ export function Header() {
           onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
           className="text-slate-500 hover:text-slate-300 hover:bg-white/[0.04] rounded-xl"
         >
-          {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+          {mounted ? (theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />) : <Sun className="h-4 w-4" />}
         </Button>
 
         <Button variant="ghost" size="icon" className="text-slate-500 hover:text-slate-300 hover:bg-white/[0.04] rounded-xl">
