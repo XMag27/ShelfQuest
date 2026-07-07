@@ -9,7 +9,7 @@ import { AddGameDialog } from '@/components/game/add-game-dialog';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowLeft, Loader2, ExternalLink } from 'lucide-react';
+import { ArrowLeft, Loader2, ExternalLink, Gamepad2 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -50,7 +50,7 @@ export default function IGDBGamePage() {
   if (!initialized || !user) {
     return (
       <div className="flex items-center justify-center min-h-[50vh]">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-500" />
+        <div className="animate-spin rounded-full h-8 w-8 border-2 border-violet-500 border-t-transparent" />
       </div>
     );
   }
@@ -58,17 +58,20 @@ export default function IGDBGamePage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[50vh]">
-        <Loader2 className="h-8 w-8 text-purple-500 animate-spin" />
+        <Loader2 className="h-8 w-8 text-violet-400 animate-spin" />
       </div>
     );
   }
 
   if (!gameData) {
     return (
-      <div className="text-center py-16">
-        <p className="text-slate-400 text-lg">Game not found on IGDB</p>
+      <div className="text-center py-20">
+        <div className="w-24 h-24 rounded-2xl bg-white/[0.03] border border-white/[0.06] flex items-center justify-center mx-auto mb-6">
+          <Gamepad2 className="h-12 w-12 text-slate-600" />
+        </div>
+        <p className="text-slate-400 text-lg font-medium">Game not found on IGDB</p>
         <Link href="/search">
-          <Button variant="outline" className="mt-4 border-purple-500/30 text-purple-300">
+          <Button variant="outline" className="mt-4 border-white/[0.08] text-slate-300 hover:bg-white/[0.04]">
             Back to Search
           </Button>
         </Link>
@@ -113,57 +116,77 @@ export default function IGDBGamePage() {
 
   return (
     <div className="space-y-6">
-      <Button variant="ghost" onClick={() => router.back()} className="text-slate-400 hover:text-slate-200">
+      {/* Hero background */}
+      {coverUrl && (
+        <div className="absolute inset-0 -z-10 overflow-hidden">
+          <Image
+            src={coverUrl}
+            alt=""
+            fill
+            className="object-cover object-top opacity-[0.08] blur-3xl scale-110"
+            sizes="100vw"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a12]/50 to-[#0a0a12]" />
+        </div>
+      )}
+
+      <Button variant="ghost" onClick={() => router.back()} className="text-slate-400 hover:text-white hover:bg-white/[0.04] rounded-xl">
         <ArrowLeft className="h-4 w-4 mr-2" />
         Back
       </Button>
 
       <div className="flex flex-col md:flex-row gap-6">
         {/* Cover */}
-        <div className="relative w-48 h-64 shrink-0 overflow-hidden rounded-lg mx-auto md:mx-0">
+        <div className="relative w-48 h-64 shrink-0 overflow-hidden rounded-xl mx-auto md:mx-0 shadow-2xl shadow-black/50">
           {coverUrl ? (
             <Image src={coverUrl} alt={gameData.name} fill className="object-cover" sizes="192px" />
           ) : (
-            <div className="flex h-full w-full items-center justify-center bg-slate-800">
-              <span className="text-6xl">🎮</span>
+            <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-violet-500/10 to-indigo-600/10">
+              <span className="text-6xl opacity-30">🎮</span>
             </div>
           )}
         </div>
 
         {/* Info */}
-        <div className="flex-1 space-y-3">
+        <div className="flex-1 space-y-4">
           <div className="flex items-start justify-between gap-4">
-            <h1 className="text-3xl font-bold text-slate-100">{gameData.name}</h1>
-            <Badge variant="outline" className="border-purple-500/50 text-purple-300 shrink-0">
+            <h1 className="text-3xl font-bold text-white">{gameData.name}</h1>
+            <Badge variant="outline" className="border-violet-500/40 text-violet-300 bg-violet-500/10 shrink-0 font-semibold">
               IGDB
             </Badge>
           </div>
 
-          {developer && (
-            <p className="text-sm text-slate-400">
-              <span className="text-slate-300">Developer:</span> {developer}
-            </p>
+          {(developer || publisher || releaseDate) && (
+            <div className="flex flex-wrap gap-4 text-sm">
+              {developer && (
+                <p className="text-slate-400">
+                  <span className="text-slate-500">Developer:</span> <span className="text-slate-200">{developer}</span>
+                </p>
+              )}
+              {publisher && (
+                <p className="text-slate-400">
+                  <span className="text-slate-500">Publisher:</span> <span className="text-slate-200">{publisher}</span>
+                </p>
+              )}
+              {releaseDate && (
+                <p className="text-slate-400">
+                  <span className="text-slate-500">Released:</span> <span className="text-slate-200">{releaseDate}</span>
+                </p>
+              )}
+            </div>
           )}
-          {publisher && (
-            <p className="text-sm text-slate-400">
-              <span className="text-slate-300">Publisher:</span> {publisher}
-            </p>
-          )}
-          {releaseDate && (
-            <p className="text-sm text-slate-400">
-              <span className="text-slate-300">Released:</span> {releaseDate}
-            </p>
-          )}
+
           {gameData.rating && (
-            <p className="text-sm text-slate-400">
-              <span className="text-slate-300">Rating:</span> ⭐ {(gameData.rating / 10).toFixed(1)}/10
-              {gameData.rating_count && ` (${gameData.rating_count} votes)`}
-            </p>
+            <div className="flex items-center gap-1 px-3 py-2 rounded-xl bg-amber-500/[0.08] border border-amber-500/20 w-fit">
+              <span className="text-amber-400">⭐</span>
+              <span className="text-sm font-medium text-amber-300">{(gameData.rating / 10).toFixed(1)}/10</span>
+              {gameData.rating_count && <span className="text-xs text-amber-400/60 ml-1">({gameData.rating_count} votes)</span>}
+            </div>
           )}
 
           <div className="flex flex-wrap gap-2">
             {genres.map((genre: string) => (
-              <Badge key={genre} variant="secondary" className="bg-slate-800 text-slate-300 border-0">
+              <Badge key={genre} variant="secondary" className="bg-white/[0.04] text-slate-300 border-white/[0.06] border">
                 {genre}
               </Badge>
             ))}
@@ -171,7 +194,7 @@ export default function IGDBGamePage() {
 
           <div className="flex flex-wrap gap-1">
             {platforms.map((platform: string) => (
-              <Badge key={platform} variant="outline" className="border-slate-700 text-slate-400 text-xs">
+              <Badge key={platform} variant="outline" className="border-white/[0.08] text-slate-400 text-xs">
                 {platform}
               </Badge>
             ))}
@@ -183,12 +206,12 @@ export default function IGDBGamePage() {
 
       {/* Description */}
       {(gameData.summary || gameData.storyline) && (
-        <Card className="border-purple-500/10 bg-slate-900/80">
+        <Card className="border-white/[0.06] bg-white/[0.03] backdrop-blur-sm">
           <CardHeader>
-            <CardTitle className="text-lg text-slate-200">Description</CardTitle>
+            <CardTitle className="text-lg text-white">Description</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-slate-300 whitespace-pre-wrap">
+            <p className="text-slate-300 whitespace-pre-wrap leading-relaxed">
               {gameData.storyline || gameData.summary}
             </p>
           </CardContent>
@@ -201,7 +224,7 @@ export default function IGDBGamePage() {
           href={`https://www.igdb.com/games/${gameData.slug || gameData.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-sm text-purple-400 hover:text-purple-300 underline"
+          className="text-sm text-violet-400 hover:text-violet-300 underline underline-offset-4"
         >
           View on IGDB
         </a>

@@ -37,18 +37,18 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className="min-h-screen bg-slate-950 text-slate-100 antialiased">
+      <body className="min-h-screen bg-[#0a0a12] text-slate-100 antialiased">
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
           <TooltipProvider>
             <AuthInitializer>
-              <div className="flex h-screen overflow-hidden">
+              <div className="flex h-screen overflow-hidden bg-gradient-to-br from-[#0a0a12] via-[#0d0d1a] to-[#0a0a12]">
                 {/* Sidebar - desktop only */}
                 <Sidebar />
 
                 {/* Main content area */}
                 <div className="flex flex-1 flex-col overflow-hidden">
                   <Header />
-                  <main className="flex-1 overflow-y-auto p-4 md:p-6 pb-20 md:pb-6">
+                  <main className="flex-1 overflow-y-auto p-4 md:p-6 pb-24 md:pb-6 scrollbar-thin">
                     {children}
                   </main>
                 </div>

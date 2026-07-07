@@ -9,6 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { toast } from 'sonner';
+import { Gamepad2 } from 'lucide-react';
 
 interface AuthFormProps {
   mode: 'login' | 'register';
@@ -67,12 +68,23 @@ export function AuthForm({ mode }: AuthFormProps) {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950 p-4">
-      <Card className="w-full max-w-md border-purple-500/20 bg-slate-900/80 backdrop-blur-sm">
-        <CardHeader className="text-center">
-          <CardTitle className="text-3xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
-            ShelfQuest
-          </CardTitle>
+    <div className="relative flex min-h-screen items-center justify-center p-4 overflow-hidden">
+      {/* Animated background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-[#0a0a12] via-[#0d0d1a] to-[#0a0a12]" />
+      <div className="absolute top-1/4 -left-20 w-96 h-96 rounded-full bg-violet-600/10 blur-[100px] animate-pulse" />
+      <div className="absolute bottom-1/4 -right-20 w-96 h-96 rounded-full bg-indigo-600/10 blur-[100px] animate-pulse" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full bg-cyan-600/5 blur-[80px]" />
+
+      <Card className="relative w-full max-w-md border-white/[0.08] bg-white/[0.03] backdrop-blur-2xl shadow-2xl shadow-violet-500/5">
+        <CardHeader className="text-center pb-2">
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500 to-indigo-600 shadow-lg shadow-violet-500/30">
+              <Gamepad2 className="h-5 w-5 text-white" />
+            </div>
+            <CardTitle className="text-3xl font-bold gradient-text">
+              ShelfQuest
+            </CardTitle>
+          </div>
           <CardDescription className="text-slate-400">
             {mode === 'login' ? 'Sign in to your game backlog tracker' : 'Create your account'}
           </CardDescription>
@@ -88,7 +100,7 @@ export function AuthForm({ mode }: AuthFormProps) {
                   placeholder="GamerTag"
                   value={displayName}
                   onChange={(e) => setDisplayName(e.target.value)}
-                  className="border-slate-700 bg-slate-800 text-slate-100"
+                  className="border-white/[0.08] bg-white/[0.04] text-slate-100 placeholder:text-slate-500 focus:border-violet-500/40"
                 />
               </div>
             )}
@@ -101,7 +113,7 @@ export function AuthForm({ mode }: AuthFormProps) {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="border-slate-700 bg-slate-800 text-slate-100"
+                className="border-white/[0.08] bg-white/[0.04] text-slate-100 placeholder:text-slate-500 focus:border-violet-500/40"
               />
             </div>
             <div className="space-y-2">
@@ -113,28 +125,28 @@ export function AuthForm({ mode }: AuthFormProps) {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="border-slate-700 bg-slate-800 text-slate-100"
+                className="border-white/[0.08] bg-white/[0.04] text-slate-100 placeholder:text-slate-500 focus:border-violet-500/40"
               />
             </div>
 
             {mode === 'login' && showReset && (
-              <Button type="button" variant="outline" onClick={handleResetPassword} className="w-full border-purple-500/30 text-purple-300 hover:bg-purple-500/10">
+              <Button type="button" variant="outline" onClick={handleResetPassword} className="w-full border-violet-500/30 text-violet-300 hover:bg-violet-500/10 hover:border-violet-500/50">
                 Send Reset Email
               </Button>
             )}
 
-            <Button type="submit" className="w-full bg-purple-600 hover:bg-purple-700 text-white" disabled={loading}>
+            <Button type="submit" className="w-full bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white border-0 shadow-lg shadow-violet-500/20" disabled={loading}>
               {loading ? 'Loading...' : mode === 'login' ? 'Sign In' : 'Create Account'}
             </Button>
           </form>
 
           <div className="my-4 flex items-center gap-4">
-            <Separator className="flex-1 bg-slate-700" />
+            <Separator className="flex-1 bg-white/[0.06]" />
             <span className="text-xs text-slate-500">OR</span>
-            <Separator className="flex-1 bg-slate-700" />
+            <Separator className="flex-1 bg-white/[0.06]" />
           </div>
 
-          <Button variant="outline" onClick={handleGoogleSignIn} className="w-full border-slate-700 bg-slate-800 text-slate-200 hover:bg-slate-700">
+          <Button variant="outline" onClick={handleGoogleSignIn} className="w-full border-white/[0.08] bg-white/[0.04] text-slate-200 hover:bg-white/[0.06] hover:border-white/[0.12]">
             <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
               <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4" />
               <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
@@ -148,10 +160,10 @@ export function AuthForm({ mode }: AuthFormProps) {
             {mode === 'login' ? (
               <>
                 Don&apos;t have an account?{' '}
-                <a href="/register" className="text-purple-400 hover:text-purple-300">Sign up</a>
+                <a href="/register" className="text-violet-400 hover:text-violet-300 underline underline-offset-4">Sign up</a>
                 <br />
                 {!showReset && (
-                  <button type="button" onClick={() => setShowReset(true)} className="text-slate-500 hover:text-slate-400">
+                  <button type="button" onClick={() => setShowReset(true)} className="text-slate-500 hover:text-slate-400 underline underline-offset-4">
                     Forgot password?
                   </button>
                 )}
@@ -159,7 +171,7 @@ export function AuthForm({ mode }: AuthFormProps) {
             ) : (
               <>
                 Already have an account?{' '}
-                <a href="/login" className="text-purple-400 hover:text-purple-300">Sign in</a>
+                <a href="/login" className="text-violet-400 hover:text-violet-300 underline underline-offset-4">Sign in</a>
               </>
             )}
           </div>

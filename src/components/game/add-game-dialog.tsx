@@ -27,7 +27,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useAuthStore } from '@/stores/auth-store';
 import { useGameStore } from '@/stores/game-store';
 import { toast } from 'sonner';
-import { Plus } from 'lucide-react';
+import { Plus, Gamepad2 } from 'lucide-react';
 
 interface AddGameDialogProps {
   game?: SearchResult;
@@ -105,13 +105,14 @@ export function AddGameDialog({ game, children, open: controlledOpen, onOpenChan
 
   return (
     <Dialog open={isOpen} onOpenChange={setOpen}>
-      <DialogTrigger render={<Button className="bg-purple-600 hover:bg-purple-700 text-white" />}>
+      <DialogTrigger render={<Button className="bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white border-0 shadow-lg shadow-violet-500/20" />}>
         <Plus className="h-4 w-4 mr-2" />
         Add to Collection
       </DialogTrigger>
-      <DialogContent className="bg-slate-900 border-purple-500/20 text-slate-100 max-h-[90vh] overflow-y-auto">
+      <DialogContent className="bg-[#12122a]/95 backdrop-blur-xl border-white/[0.08] text-slate-100 max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-slate-100">
+          <DialogTitle className="text-white flex items-center gap-2">
+            <Gamepad2 className="h-5 w-5 text-violet-400" />
             Add {game?.title || 'Game'} to Collection
           </DialogTitle>
           <DialogDescription className="text-slate-400">
@@ -124,12 +125,12 @@ export function AddGameDialog({ game, children, open: controlledOpen, onOpenChan
           <div className="space-y-2">
             <Label className="text-slate-300">Play Status</Label>
             <Select value={playStatus} onValueChange={(v) => setPlayStatus(v as PlayStatus)}>
-              <SelectTrigger className="border-slate-700 bg-slate-800 text-slate-100">
+              <SelectTrigger className="border-white/[0.08] bg-white/[0.04] text-slate-100 focus:border-violet-500/40">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent className="bg-slate-800 border-slate-700">
+              <SelectContent className="bg-[#1a1a2e]/95 backdrop-blur-xl border-white/[0.08]">
                 {Object.entries(playStatusLabelMap).map(([value, label]) => (
-                  <SelectItem key={value} value={value} className="text-slate-200 focus:bg-slate-700">
+                  <SelectItem key={value} value={value} className="text-slate-200 focus:bg-white/[0.04]">
                     {label}
                   </SelectItem>
                 ))}
@@ -141,12 +142,12 @@ export function AddGameDialog({ game, children, open: controlledOpen, onOpenChan
           <div className="space-y-2">
             <Label className="text-slate-300">Completion Status</Label>
             <Select value={completionStatus} onValueChange={(v) => setCompletionStatus(v as CompletionStatus)}>
-              <SelectTrigger className="border-slate-700 bg-slate-800 text-slate-100">
+              <SelectTrigger className="border-white/[0.08] bg-white/[0.04] text-slate-100 focus:border-violet-500/40">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent className="bg-slate-800 border-slate-700">
+              <SelectContent className="bg-[#1a1a2e]/95 backdrop-blur-xl border-white/[0.08]">
                 {Object.entries(completionStatusLabelMap).map(([value, label]) => (
-                  <SelectItem key={value} value={value} className="text-slate-200 focus:bg-slate-700">
+                  <SelectItem key={value} value={value} className="text-slate-200 focus:bg-white/[0.04]">
                     {label}
                   </SelectItem>
                 ))}
@@ -167,8 +168,8 @@ export function AddGameDialog({ game, children, open: controlledOpen, onOpenChan
                   onClick={() => handlePlatformToggle(value as GamePlatform)}
                   className={
                     platforms.includes(value as GamePlatform)
-                      ? 'bg-purple-600 hover:bg-purple-700 text-white'
-                      : 'border-slate-700 text-slate-400 hover:text-slate-200'
+                      ? 'bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white border-0 shadow-md shadow-violet-500/20'
+                      : 'border-white/[0.08] text-slate-400 hover:text-white hover:bg-white/[0.06]'
                   }
                 >
                   {label}
@@ -186,7 +187,7 @@ export function AddGameDialog({ game, children, open: controlledOpen, onOpenChan
               max={10}
               value={personalRating}
               onChange={(e) => setPersonalRating(Math.min(10, Math.max(0, Number(e.target.value))))}
-              className="border-slate-700 bg-slate-800 text-slate-100"
+              className="border-white/[0.08] bg-white/[0.04] text-slate-100 focus:border-violet-500/40"
             />
           </div>
 
@@ -198,7 +199,7 @@ export function AddGameDialog({ game, children, open: controlledOpen, onOpenChan
               min={0}
               value={hoursPlayed}
               onChange={(e) => setHoursPlayed(Math.max(0, Number(e.target.value)))}
-              className="border-slate-700 bg-slate-800 text-slate-100"
+              className="border-white/[0.08] bg-white/[0.04] text-slate-100 focus:border-violet-500/40"
             />
           </div>
 
@@ -209,14 +210,14 @@ export function AddGameDialog({ game, children, open: controlledOpen, onOpenChan
               placeholder="Personal notes about this game..."
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
-              className="border-slate-700 bg-slate-800 text-slate-100 min-h-[80px]"
+              className="border-white/[0.08] bg-white/[0.04] text-slate-100 placeholder:text-slate-500 focus:border-violet-500/40 min-h-[80px]"
             />
           </div>
 
           <Button
             onClick={handleSubmit}
             disabled={saving}
-            className="w-full bg-purple-600 hover:bg-purple-700 text-white"
+            className="w-full bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white border-0 shadow-lg shadow-violet-500/20"
           >
             {saving ? 'Adding...' : 'Add to Collection'}
           </Button>

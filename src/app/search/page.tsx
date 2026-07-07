@@ -5,10 +5,9 @@ import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/stores/auth-store';
 import { SearchBar } from '@/components/search/search-bar';
 import { type SearchResult, DataSource } from '@/types';
-import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Loader2, TrendingUp } from 'lucide-react';
+import { Loader2, TrendingUp, Search as SearchIcon, Sparkles } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -60,7 +59,7 @@ export default function SearchPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-slate-100">Search Games</h1>
+        <h1 className="text-3xl font-bold text-white">Search Games</h1>
         <p className="text-slate-400 mt-1">Search across IGDB and RAWG databases</p>
       </div>
 
@@ -73,7 +72,7 @@ export default function SearchPage() {
           variant="outline"
           onClick={handlePopular}
           disabled={loading}
-          className="border-purple-500/30 text-purple-300 hover:bg-purple-500/10"
+          className="border-violet-500/30 text-violet-300 hover:bg-violet-500/10 hover:border-violet-500/50 bg-white/[0.02]"
         >
           <TrendingUp className="h-4 w-4 mr-2" />
           Popular Games
@@ -81,14 +80,24 @@ export default function SearchPage() {
       </div>
 
       {loading && (
-        <div className="flex items-center justify-center py-16">
-          <Loader2 className="h-8 w-8 text-purple-500 animate-spin" />
+        <div className="flex items-center justify-center py-20">
+          <div className="flex flex-col items-center gap-4">
+            <div className="relative">
+              <div className="animate-spin rounded-full h-12 w-12 border-2 border-violet-500 border-t-transparent" />
+              <Sparkles className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-5 w-5 text-violet-400" />
+            </div>
+            <p className="text-slate-400 text-sm">Searching databases...</p>
+          </div>
         </div>
       )}
 
       {!loading && searched && results.length === 0 && (
-        <div className="text-center py-16">
-          <p className="text-slate-400">No results found. Try a different search term.</p>
+        <div className="text-center py-20">
+          <div className="w-20 h-20 rounded-2xl bg-white/[0.03] border border-white/[0.06] flex items-center justify-center mx-auto mb-4">
+            <SearchIcon className="h-8 w-8 text-slate-500" />
+          </div>
+          <p className="text-lg text-slate-300 font-medium">No results found</p>
+          <p className="text-sm text-slate-500 mt-1">Try a different search term</p>
         </div>
       )}
 
@@ -102,29 +111,32 @@ export default function SearchPage() {
               : '#';
 
             return (
-              <Link key={result.id} href={href}>
-                <Card className="group overflow-hidden border-purple-500/10 bg-slate-900/80 hover:border-purple-500/40 transition-all hover:shadow-lg hover:shadow-purple-500/10 cursor-pointer">
+              <Link key={result.id} href={href} className="group block">
+                <div className="game-card-hover relative overflow-hidden rounded-xl bg-white/[0.03] border border-white/[0.06] backdrop-blur-sm">
                   <div className="relative aspect-[3/4] overflow-hidden">
                     {result.coverUrl ? (
-                      <Image
-                        src={result.coverUrl}
-                        alt={result.title}
-                        fill
-                        className="object-cover transition-transform group-hover:scale-105"
-                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                      />
+                      <>
+                        <Image
+                          src={result.coverUrl}
+                          alt={result.title}
+                          fill
+                          className="object-cover transition-transform duration-500 group-hover:scale-110"
+                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a12] via-[#0a0a12]/40 to-transparent" />
+                      </>
                     ) : (
-                      <div className="flex h-full items-center justify-center bg-slate-800">
-                        <span className="text-4xl">🎮</span>
+                      <div className="flex h-full items-center justify-center bg-gradient-to-br from-violet-500/10 to-indigo-600/10">
+                        <span className="text-4xl opacity-30">🎮</span>
                       </div>
                     )}
                     <div className="absolute top-2 right-2">
                       <Badge
                         variant="outline"
-                        className={`text-xs ${
+                        className={`text-[10px] font-semibold backdrop-blur-sm ${
                           result.dataSource === DataSource.igdb
-                            ? 'border-purple-500/50 text-purple-300 bg-purple-900/50'
-                            : 'border-blue-500/50 text-blue-300 bg-blue-900/50'
+                            ? 'border-violet-500/40 text-violet-300 bg-violet-500/20'
+                            : 'border-cyan-500/40 text-cyan-300 bg-cyan-500/20'
                         }`}
                       >
                         {result.dataSource === DataSource.igdb ? 'IGDB' : 'RAWG'}
@@ -132,28 +144,40 @@ export default function SearchPage() {
                     </div>
                     {result.rating !== undefined && result.rating > 0 && (
                       <div className="absolute top-2 left-2">
-                        <Badge variant="secondary" className="text-xs bg-slate-900/80 text-yellow-400 border-0">
+                        <span className="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-black/50 backdrop-blur-sm border border-amber-500/30 text-amber-300">
                           ⭐ {result.rating.toFixed(1)}
-                        </Badge>
+                        </span>
+                      </div>
+                    )}
+                    {/* Title overlay */}
+                    {result.coverUrl && (
+                      <div className="absolute bottom-0 left-0 right-0 p-3 z-10">
+                        <h3 className="font-semibold text-sm text-white truncate drop-shadow-lg">{result.title}</h3>
                       </div>
                     )}
                   </div>
-                  <CardContent className="p-3">
-                    <h3 className="font-semibold text-sm text-slate-100 truncate">{result.title}</h3>
-                    {result.developer && (
-                      <p className="text-xs text-slate-400 mt-0.5 truncate">{result.developer}</p>
-                    )}
-                    {result.genres.length > 0 && (
-                      <div className="flex flex-wrap gap-1 mt-1.5">
-                        {result.genres.slice(0, 3).map((genre) => (
-                          <Badge key={genre} variant="secondary" className="text-[10px] bg-slate-800 text-slate-300 border-0">
-                            {genre}
-                          </Badge>
-                        ))}
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
+                  {!result.coverUrl && (
+                    <div className="p-3">
+                      <h3 className="font-semibold text-sm text-white truncate">{result.title}</h3>
+                    </div>
+                  )}
+                  {(result.developer || result.genres.length > 0) && (
+                    <div className="px-3 pb-3">
+                      {result.developer && (
+                        <p className="text-xs text-slate-400 truncate">{result.developer}</p>
+                      )}
+                      {result.genres.length > 0 && (
+                        <div className="flex flex-wrap gap-1 mt-1.5">
+                          {result.genres.slice(0, 3).map((genre) => (
+                            <Badge key={genre} variant="secondary" className="text-[10px] bg-white/[0.04] text-slate-400 border-white/[0.06] border">
+                              {genre}
+                            </Badge>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
               </Link>
             );
           })}

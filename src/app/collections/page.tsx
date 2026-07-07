@@ -40,7 +40,7 @@ export default function CollectionsPage() {
   if (!initialized || !user) {
     return (
       <div className="flex items-center justify-center min-h-[50vh]">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-500" />
+        <div className="animate-spin rounded-full h-8 w-8 border-2 border-violet-500 border-t-transparent" />
       </div>
     );
   }
@@ -84,18 +84,18 @@ export default function CollectionsPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-slate-100">Collections</h1>
+          <h1 className="text-3xl font-bold text-white">Collections</h1>
           <p className="text-slate-400 mt-1">Organize your games into custom collections</p>
         </div>
 
         <Dialog open={showCreate} onOpenChange={setShowCreate}>
-          <DialogTrigger render={<Button className="bg-purple-600 hover:bg-purple-700 text-white" />}>
+          <DialogTrigger render={<Button className="bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white border-0 shadow-lg shadow-violet-500/20" />}>
             <Plus className="h-4 w-4 mr-2" />
             New Collection
           </DialogTrigger>
-          <DialogContent className="bg-slate-900 border-purple-500/20 text-slate-100">
+          <DialogContent className="bg-[#12122a]/95 backdrop-blur-xl border-white/[0.08] text-slate-100">
             <DialogHeader>
-              <DialogTitle className="text-slate-100">Create Collection</DialogTitle>
+              <DialogTitle className="text-white">Create Collection</DialogTitle>
               <DialogDescription className="text-slate-400">Create a new collection to organize your games.</DialogDescription>
             </DialogHeader>
             <div className="space-y-4 py-2">
@@ -105,7 +105,7 @@ export default function CollectionsPage() {
                   placeholder="e.g., Best RPGs"
                   value={newName}
                   onChange={(e) => setNewName(e.target.value)}
-                  className="border-slate-700 bg-slate-800 text-slate-100"
+                  className="border-white/[0.08] bg-white/[0.04] text-slate-100 placeholder:text-slate-500 focus:border-violet-500/40"
                 />
               </div>
               <div className="space-y-2">
@@ -114,13 +114,13 @@ export default function CollectionsPage() {
                   placeholder="What's this collection about?"
                   value={newDescription}
                   onChange={(e) => setNewDescription(e.target.value)}
-                  className="border-slate-700 bg-slate-800 text-slate-100 min-h-[80px]"
+                  className="border-white/[0.08] bg-white/[0.04] text-slate-100 placeholder:text-slate-500 focus:border-violet-500/40 min-h-[80px]"
                 />
               </div>
               <Button
                 onClick={handleCreate}
                 disabled={saving}
-                className="w-full bg-purple-600 hover:bg-purple-700 text-white"
+                className="w-full bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white border-0 shadow-lg shadow-violet-500/20"
               >
                 {saving ? 'Creating...' : 'Create Collection'}
               </Button>
@@ -130,11 +130,13 @@ export default function CollectionsPage() {
       </div>
 
       {collections.length === 0 ? (
-        <div className="text-center py-16">
-          <FolderOpen className="h-16 w-16 mx-auto text-slate-600 mb-4" />
-          <h2 className="text-2xl font-bold text-slate-300 mb-2">No collections yet</h2>
+        <div className="text-center py-20">
+          <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-violet-500/10 to-indigo-600/10 border border-white/[0.06] flex items-center justify-center mx-auto mb-6">
+            <FolderOpen className="h-12 w-12 text-violet-400/60" />
+          </div>
+          <h2 className="text-2xl font-bold text-white mb-2">No collections yet</h2>
           <p className="text-slate-500 mb-6">Create your first collection to organize your games</p>
-          <Button onClick={() => setShowCreate(true)} className="bg-purple-600 hover:bg-purple-700 text-white">
+          <Button onClick={() => setShowCreate(true)} className="bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white border-0 shadow-lg shadow-violet-500/20">
             <Plus className="h-4 w-4 mr-2" />
             Create Collection
           </Button>
@@ -144,12 +146,12 @@ export default function CollectionsPage() {
           {collections.map((collection) => {
             const collectionGames = games.filter((g) => collection.gameIds.includes(g.id));
             return (
-              <Card key={collection.id} className="border-purple-500/10 bg-slate-900/80 hover:border-purple-500/40 transition-all group">
+              <Card key={collection.id} className="border-white/[0.06] bg-white/[0.03] backdrop-blur-sm hover:bg-white/[0.05] hover:border-white/[0.1] transition-all duration-200 group">
                 <Link href={`/collection/${collection.id}`}>
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-lg text-slate-100 flex items-center justify-between">
+                    <CardTitle className="text-lg text-white flex items-center justify-between">
                       {collection.name}
-                      <span className="text-sm font-normal text-slate-400">
+                      <span className="text-sm font-normal text-slate-500">
                         {collection.gameIds.length} game{collection.gameIds.length !== 1 ? 's' : ''}
                       </span>
                     </CardTitle>
@@ -161,18 +163,18 @@ export default function CollectionsPage() {
                     {collectionGames.length > 0 ? (
                       <div className="flex -space-x-2">
                         {collectionGames.slice(0, 5).map((game) => (
-                          <div key={game.id} className="relative h-10 w-8 rounded overflow-hidden border-2 border-slate-900">
+                          <div key={game.id} className="relative h-10 w-8 rounded overflow-hidden border-2 border-[#0a0a12]">
                             {game.coverUrl ? (
                               <img src={game.coverUrl} alt={game.title} className="h-full w-full object-cover" />
                             ) : (
-                              <div className="flex h-full w-full items-center justify-center bg-slate-800">
-                                <span className="text-xs">🎮</span>
+                              <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-violet-500/10 to-indigo-600/10">
+                                <span className="text-xs opacity-30">🎮</span>
                               </div>
                             )}
                           </div>
                         ))}
                         {collectionGames.length > 5 && (
-                          <div className="flex h-10 w-8 items-center justify-center rounded bg-slate-800 border-2 border-slate-900 text-xs text-slate-400">
+                          <div className="flex h-10 w-8 items-center justify-center rounded bg-white/[0.04] border-2 border-[#0a0a12] text-xs text-slate-400">
                             +{collectionGames.length - 5}
                           </div>
                         )}
@@ -190,7 +192,7 @@ export default function CollectionsPage() {
                       e.preventDefault();
                       handleDelete(collection.id);
                     }}
-                    className="text-red-400 hover:text-red-300 hover:bg-red-500/10 opacity-0 group-hover:opacity-100 transition-opacity"
+                    className="text-red-400/60 hover:text-red-400 hover:bg-red-500/10 opacity-0 group-hover:opacity-100 transition-opacity"
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>

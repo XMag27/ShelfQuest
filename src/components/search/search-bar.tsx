@@ -62,8 +62,8 @@ export function SearchBar({ className, onResultClick }: SearchBarProps) {
 
   return (
     <div className={`relative ${className || ''}`}>
-      <div className="relative">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+      <div className="relative group">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500 group-focus-within:text-violet-400 transition-colors" />
         <Input
           type="text"
           placeholder="Search games..."
@@ -73,34 +73,34 @@ export function SearchBar({ className, onResultClick }: SearchBarProps) {
             setShowDropdown(true);
           }}
           onFocus={() => setShowDropdown(true)}
-          className="pl-10 pr-10 border-slate-700 bg-slate-800/80 text-slate-100 placeholder:text-slate-500"
+          className="pl-10 pr-10 border-white/[0.06] bg-white/[0.03] text-slate-100 placeholder:text-slate-500 focus:border-violet-500/40 focus:bg-white/[0.06] transition-all duration-200"
         />
-        {query && (
+        {query && !loading && (
           <button
             onClick={() => {
               setQuery('');
               setResults([]);
             }}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white transition-colors"
           >
             <X className="h-4 w-4" />
           </button>
         )}
         {loading && (
-          <Loader2 className="absolute right-10 top-1/2 -translate-y-1/2 h-4 w-4 text-purple-400 animate-spin" />
+          <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-violet-400 animate-spin" />
         )}
       </div>
 
       {showDropdown && results.length > 0 && (
-        <div className="absolute z-50 mt-1 w-full rounded-lg border border-purple-500/20 bg-slate-900 shadow-xl shadow-purple-500/5 max-h-96 overflow-y-auto">
+        <div className="absolute z-50 mt-2 w-full rounded-xl border border-white/[0.08] bg-[#12122a]/95 backdrop-blur-2xl shadow-2xl shadow-black/40 max-h-96 overflow-y-auto">
           {results.map((result) => (
             <button
               key={result.id}
               onClick={() => handleResultClick(result)}
-              className="flex items-center gap-3 w-full px-3 py-2 hover:bg-slate-800 transition-colors text-left"
+              className="flex items-center gap-3 w-full px-3 py-2.5 hover:bg-white/[0.04] transition-colors text-left first:rounded-t-xl last:rounded-b-xl"
             >
               {/* Thumbnail */}
-              <div className="relative h-12 w-9 shrink-0 overflow-hidden rounded">
+              <div className="relative h-12 w-9 shrink-0 overflow-hidden rounded-lg bg-gradient-to-br from-violet-500/10 to-indigo-600/10">
                 {result.coverUrl ? (
                   <Image
                     src={result.coverUrl}
@@ -110,15 +110,15 @@ export function SearchBar({ className, onResultClick }: SearchBarProps) {
                     sizes="36px"
                   />
                 ) : (
-                  <div className="flex h-full w-full items-center justify-center bg-slate-800">
-                    <span className="text-xs">🎮</span>
+                  <div className="flex h-full w-full items-center justify-center">
+                    <span className="text-xs opacity-30">🎮</span>
                   </div>
                 )}
               </div>
 
               {/* Info */}
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-slate-100 truncate">{result.title}</p>
+                <p className="text-sm font-medium text-white truncate">{result.title}</p>
                 <div className="flex items-center gap-2 text-xs text-slate-400">
                   {result.developer && <span>{result.developer}</span>}
                 </div>
@@ -127,17 +127,17 @@ export function SearchBar({ className, onResultClick }: SearchBarProps) {
               {/* Source badge */}
               <Badge
                 variant="outline"
-                className={`text-xs shrink-0 ${
+                className={`text-[10px] shrink-0 font-semibold ${
                   result.dataSource === DataSource.igdb
-                    ? 'border-purple-500/30 text-purple-400'
-                    : 'border-blue-500/30 text-blue-400'
+                    ? 'border-violet-500/30 text-violet-400 bg-violet-500/10'
+                    : 'border-cyan-500/30 text-cyan-400 bg-cyan-500/10'
                 }`}
               >
                 {result.dataSource === DataSource.igdb ? 'IGDB' : 'RAWG'}
               </Badge>
 
               {result.rating !== undefined && result.rating > 0 && (
-                <span className="text-xs text-yellow-400 shrink-0">⭐ {result.rating.toFixed(1)}</span>
+                <span className="text-xs text-amber-400 shrink-0 font-medium">⭐ {result.rating.toFixed(1)}</span>
               )}
             </button>
           ))}

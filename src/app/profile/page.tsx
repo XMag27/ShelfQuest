@@ -12,7 +12,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { toast } from 'sonner';
-import { User, Save } from 'lucide-react';
+import { User, Save, Bell, Gamepad2 } from 'lucide-react';
 
 export default function ProfilePage() {
   const { user, initialized } = useAuthStore();
@@ -60,7 +60,7 @@ export default function ProfilePage() {
   if (!initialized || !user) {
     return (
       <div className="flex items-center justify-center min-h-[50vh]">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-500" />
+        <div className="animate-spin rounded-full h-8 w-8 border-2 border-violet-500 border-t-transparent" />
       </div>
     );
   }
@@ -96,7 +96,7 @@ export default function ProfilePage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[50vh]">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-500" />
+        <div className="animate-spin rounded-full h-8 w-8 border-2 border-violet-500 border-t-transparent" />
       </div>
     );
   }
@@ -104,28 +104,30 @@ export default function ProfilePage() {
   return (
     <div className="space-y-6 max-w-2xl">
       <div>
-        <h1 className="text-3xl font-bold text-slate-100">Profile</h1>
+        <h1 className="text-3xl font-bold text-white">Profile</h1>
         <p className="text-slate-400 mt-1">Manage your account and preferences</p>
       </div>
 
       {/* Avatar & basic info */}
-      <Card className="border-purple-500/20 bg-slate-900/80">
+      <Card className="border-white/[0.06] bg-white/[0.03] backdrop-blur-sm">
         <CardHeader>
-          <CardTitle className="text-lg text-slate-200 flex items-center gap-2">
-            <User className="h-5 w-5" />
+          <CardTitle className="text-lg text-white flex items-center gap-2">
+            <div className="p-1.5 rounded-lg stat-icon-violet">
+              <User className="h-4 w-4 text-violet-400" />
+            </div>
             Account
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex items-center gap-4">
-            <Avatar className="h-16 w-16">
-              <AvatarFallback className="bg-purple-600 text-white text-2xl">
+            <Avatar className="h-16 w-16 border-2 border-white/[0.08]">
+              <AvatarFallback className="bg-gradient-to-br from-violet-500 to-indigo-600 text-white text-2xl font-bold">
                 {user!.displayName?.[0]?.toUpperCase() || user!.email?.[0]?.toUpperCase() || 'U'}
               </AvatarFallback>
             </Avatar>
             <div>
-              <p className="text-slate-100 font-medium">{user!.displayName || 'No display name'}</p>
-              <p className="text-sm text-slate-400">{user!.email}</p>
+              <p className="text-white font-medium">{user!.displayName || 'No display name'}</p>
+              <p className="text-sm text-slate-500">{user!.email}</p>
             </div>
           </div>
 
@@ -135,16 +137,21 @@ export default function ProfilePage() {
               value={displayName}
               onChange={(e) => setDisplayName(e.target.value)}
               placeholder="Your display name"
-              className="border-slate-700 bg-slate-800 text-slate-100"
+              className="border-white/[0.08] bg-white/[0.04] text-slate-100 placeholder:text-slate-500 focus:border-violet-500/40"
             />
           </div>
         </CardContent>
       </Card>
 
       {/* Preferred Platforms */}
-      <Card className="border-purple-500/20 bg-slate-900/80">
+      <Card className="border-white/[0.06] bg-white/[0.03] backdrop-blur-sm">
         <CardHeader>
-          <CardTitle className="text-lg text-slate-200">Preferred Platforms</CardTitle>
+          <CardTitle className="text-lg text-white flex items-center gap-2">
+            <div className="p-1.5 rounded-lg stat-icon-green">
+              <Gamepad2 className="h-4 w-4 text-emerald-400" />
+            </div>
+            Preferred Platforms
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex flex-wrap gap-2">
@@ -157,8 +164,8 @@ export default function ProfilePage() {
                 onClick={() => handlePlatformToggle(value as GamePlatform)}
                 className={
                   preferredPlatforms.includes(value as GamePlatform)
-                    ? 'bg-purple-600 hover:bg-purple-700 text-white'
-                    : 'border-slate-700 text-slate-400 hover:text-slate-200'
+                    ? 'bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white border-0 shadow-lg shadow-violet-500/20'
+                    : 'border-white/[0.08] text-slate-400 hover:text-white hover:bg-white/[0.06]'
                 }
               >
                 {label}
@@ -169,39 +176,44 @@ export default function ProfilePage() {
       </Card>
 
       {/* Notifications */}
-      <Card className="border-purple-500/20 bg-slate-900/80">
+      <Card className="border-white/[0.06] bg-white/[0.03] backdrop-blur-sm">
         <CardHeader>
-          <CardTitle className="text-lg text-slate-200">Notifications</CardTitle>
+          <CardTitle className="text-lg text-white flex items-center gap-2">
+            <div className="p-1.5 rounded-lg stat-icon-blue">
+              <Bell className="h-4 w-4 text-cyan-400" />
+            </div>
+            Notifications
+          </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <label className="flex items-center gap-3 cursor-pointer">
+          <label className="flex items-center gap-3 cursor-pointer group">
             <input
               type="checkbox"
               checked={releaseReminders}
               onChange={(e) => setReleaseReminders(e.target.checked)}
-              className="h-4 w-4 rounded border-slate-700 bg-slate-800 text-purple-600 focus:ring-purple-500"
+              className="h-4 w-4 rounded border-white/[0.15] bg-white/[0.04] text-violet-500 focus:ring-violet-500/30 focus:ring-offset-0"
             />
             <div>
-              <p className="text-sm text-slate-200">Release Reminders</p>
-              <p className="text-xs text-slate-400">Get notified about upcoming game releases</p>
+              <p className="text-sm text-slate-200 group-hover:text-white transition-colors">Release Reminders</p>
+              <p className="text-xs text-slate-500">Get notified about upcoming game releases</p>
             </div>
           </label>
-          <label className="flex items-center gap-3 cursor-pointer">
+          <label className="flex items-center gap-3 cursor-pointer group">
             <input
               type="checkbox"
               checked={dealAlerts}
               onChange={(e) => setDealAlerts(e.target.checked)}
-              className="h-4 w-4 rounded border-slate-700 bg-slate-800 text-purple-600 focus:ring-purple-500"
+              className="h-4 w-4 rounded border-white/[0.15] bg-white/[0.04] text-violet-500 focus:ring-violet-500/30 focus:ring-offset-0"
             />
             <div>
-              <p className="text-sm text-slate-200">Deal Alerts</p>
-              <p className="text-xs text-slate-400">Get notified about game deals and discounts</p>
+              <p className="text-sm text-slate-200 group-hover:text-white transition-colors">Deal Alerts</p>
+              <p className="text-xs text-slate-500">Get notified about game deals and discounts</p>
             </div>
           </label>
         </CardContent>
       </Card>
 
-      <Button onClick={handleSave} disabled={saving} className="bg-purple-600 hover:bg-purple-700 text-white">
+      <Button onClick={handleSave} disabled={saving} className="bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white border-0 shadow-lg shadow-violet-500/20">
         <Save className="h-4 w-4 mr-2" />
         {saving ? 'Saving...' : 'Save Profile'}
       </Button>
